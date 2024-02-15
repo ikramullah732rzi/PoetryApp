@@ -23,6 +23,16 @@ interface Dao {
 
 
 
+/*
+  @Delete
+    fun delete(favuriteListModel: FavuriteListModel)
+
+    @Query("SELECT * FROM Favurite_table")
+    fun getAllFavuriteList() : LiveData<List<FavuriteListModel>>
+
+
+
+*/
 
 
 
