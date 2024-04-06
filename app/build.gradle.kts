@@ -78,9 +78,9 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$room_version")
 
     implementation("androidx.navigation:navigation-compose:2.7.5")
-    // implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
     implementation("androidx.compose.runtime:runtime-livedata:1.3.0-rc01")
     implementation ("androidx.compose.material:material-icons-extended:1.6.1")
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.35.0-alpha")
+
 
 }

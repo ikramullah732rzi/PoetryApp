@@ -24,30 +24,22 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             PoetryAppTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
                     MainApp()
-
-
                 }
             }
         }
     }
 }
-
-
 @Composable
 fun MainApp() {
-
-
     val navController = rememberNavController()
-
-    NavHost(navController = navController, startDestination = DestinationScreen.SplishedScreen.path) {
-
+    NavHost(navController = navController,
+        startDestination = DestinationScreen.SplishedScreen.path
+    ) {
 
         composable(DestinationScreen.HomeScreen.path) {
             HomeScreen(navController = navController)
@@ -60,7 +52,8 @@ fun MainApp() {
         }
         composable(
             DestinationScreen.DetailScreen.path,
-            arguments = listOf(navArgument("id") {
+            arguments = listOf(
+                navArgument("id") {
                 type = NavType.IntType
             },
                 navArgument("title"){
@@ -68,28 +61,18 @@ fun MainApp() {
                 }
             )
         ) {
-
-            var id = it.arguments?.getInt("id")
-            var title = it.arguments?.getString("title")
+            val id = it.arguments?.getInt("id")
+            val title = it.arguments?.getString("title")
             DetailScreen(id,title,navController )
         }
     }
-
 }
-
-
 sealed class DestinationScreen(var path: String) {
-
-
     object HomeScreen : DestinationScreen("HomeScreen")
     object FavuriteScreen : DestinationScreen("FavuriteScreen")
     object SplishedScreen : DestinationScreen("SplishedScreen")
-
-
     object DetailScreen : DestinationScreen("DetailScreen/{id}/{title}") {
-
         fun getid(id: Int , title :String): String {
-
             return "DetailScreen/$id/$title"
         }
     }

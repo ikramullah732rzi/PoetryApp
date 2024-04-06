@@ -64,7 +64,6 @@ fun SplishedScreen(navController: NavHostController) {
 
     Box(contentAlignment = Alignment.Center) {
 
-
         Column(
             modifier = Modifier
                 .fillMaxSize()

@@ -43,8 +43,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.example.poetryapp.DestinationScreen
 import com.example.poetryapp.data.AllShayari
@@ -52,6 +54,7 @@ import com.example.poetryapp.data.DbBuilder
 import com.example.poetryapp.data.FavuriteListModel
 import com.example.poetryapp.ui.theme.backgroundcolor
 import com.example.poetryapp.ui.theme.itemcolor
+import com.example.poetryapp.ui.theme.rowcolor
 import java.util.Random
 
 
@@ -61,12 +64,9 @@ import java.util.Random
 fun DetailScreen(id: Int?, title: String?, navController: NavHostController) {
 
     val context = LocalContext.current
-    val clist = DbBuilder.getalldatafromAssets(context).getDao().getCatagory()
     val dlist = DbBuilder.getalldatafromAssets(context).getDao().getFilterShayari(id!!)
-    dlist.shuffled(Random(12))
 
-
-
+    dlist.shuffled()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -79,8 +79,8 @@ fun DetailScreen(id: Int?, title: String?, navController: NavHostController) {
                             .padding(start = 10.dp)
                             .clickable {
                                 navController.navigate(DestinationScreen.HomeScreen.path) {
-                                    navController.popBackStack()
-
+                                    popUpTo(navController.graph.findStartDestination().id)
+                                    launchSingleTop = true
                                 }
                             }
                     )
@@ -96,29 +96,21 @@ fun DetailScreen(id: Int?, title: String?, navController: NavHostController) {
             )
         }
     ) {
-
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(itemcolor)
                 .padding(it)
         ) {
             LazyColumn() {
-
                 items(dlist) {
-
                     DetailSample(it)
-
                 }
             }
         }
-
     }
 
-
 }
-
-
 @Composable
 fun DetailSample(allShayari: AllShayari) {
     val context = LocalContext.current
@@ -134,11 +126,12 @@ fun DetailSample(allShayari: AllShayari) {
             .fillMaxSize()
             .padding(10.dp)
             .clip(RoundedCornerShape(20.dp))
-            .background(backgroundcolor)
+            .background(Color.White)
     ) {
         Text(
             text = "${allShayari.Shayari}",
-            color = Color.White,
+            fontWeight = FontWeight.ExtraBold,
+            color = Color.Black,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
@@ -152,7 +145,7 @@ fun DetailSample(allShayari: AllShayari) {
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(bottomEnd = 10.dp, bottomStart = 10.dp))
                 .background(
-                    itemcolor
+                    rowcolor
                 )
         ) {
             Icon(
@@ -221,7 +214,6 @@ fun DetailSample(allShayari: AllShayari) {
                         sendIntent.setAction(Intent.ACTION_SEND)
                         sendIntent.putExtra(Intent.EXTRA_TEXT, "${allShayari.Shayari}")
                         sendIntent.setType("text/plain")
-                        context.startActivity(Intent.createChooser(sendIntent, ""))
                         context.startActivity(sendIntent)
                     }
             )

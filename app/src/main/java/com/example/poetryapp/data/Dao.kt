@@ -9,8 +9,6 @@ import androidx.room.Query
 
 @Dao
 interface Dao {
-
-
     //----------------------------------------
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insert(favuriteListModel: FavuriteListModel)

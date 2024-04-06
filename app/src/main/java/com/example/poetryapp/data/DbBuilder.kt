@@ -14,12 +14,10 @@ object DbBuilder {
     @OptIn(InternalCoroutinesApi::class)
     fun getalldatafromAssets(context: Context): DatabasePoetry {
         if (INSTANCE == null) {
-
             synchronized(DatabasePoetry::class) {
-
               INSTANCE =  Room.databaseBuilder(context, DatabasePoetry::class.java, "mydbfile.db")
-                    .allowMainThreadQueries().setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
-                    .fallbackToDestructiveMigration().createFromAsset("Shayari.db").build()
+                    .allowMainThreadQueries()
+                    .createFromAsset("Shayari.db").build()
             }
         }
 

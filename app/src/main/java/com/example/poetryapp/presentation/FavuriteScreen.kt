@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -37,14 +38,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.example.poetryapp.DestinationScreen
 import com.example.poetryapp.data.DbBuilder
 import com.example.poetryapp.data.FavuriteListModel
 import com.example.poetryapp.ui.theme.backgroundcolor
 import com.example.poetryapp.ui.theme.itemcolor
+import com.example.poetryapp.ui.theme.rowcolor
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,9 +57,6 @@ fun FavuriteScreen(navController: NavHostController) {
 
     val context = LocalContext.current
     val clist by DbBuilder.getalldatafromAssets(context).getDao().getAllFavuriteList().observeAsState()
-
-
-
 
     Scaffold(
         topBar = {
@@ -69,8 +70,8 @@ fun FavuriteScreen(navController: NavHostController) {
                             .padding(start = 10.dp)
                             .clickable {
                                 navController.navigate(DestinationScreen.HomeScreen.path) {
-                                    navController.popBackStack()
-
+                                    popUpTo(navController.graph.findStartDestination().id)
+                                    launchSingleTop = true
                                 }
                             }
                     )
@@ -91,27 +92,21 @@ fun FavuriteScreen(navController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(itemcolor)
                 .padding(it)
         ) {
             LazyColumn() {
-
                 clist?.let {
-                    items(it.size) {
-
-                        FavuriteSample(clist,it)
-
+                    items(it) {favurite->
+                        FavuriteSample(favurite)
                     }
                 }
             }
         }
-
     }
-
-
 }
-
 @Composable
-fun FavuriteSample(clist: List<FavuriteListModel>?, i: Int) {
+fun FavuriteSample(clist: FavuriteListModel) {
     val context = LocalContext.current
 
     Column(
@@ -119,11 +114,12 @@ fun FavuriteSample(clist: List<FavuriteListModel>?, i: Int) {
             .fillMaxSize()
             .padding(10.dp)
             .clip(RoundedCornerShape(20.dp))
-            .background(backgroundcolor)
+            .background(Color.White)
     ) {
         Text(
-            text = "${clist!!.get(i).poetry}",
-            color = Color.White,
+            text = "${clist.poetry}",
+            color = Color.Black,
+            fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
@@ -137,7 +133,7 @@ fun FavuriteSample(clist: List<FavuriteListModel>?, i: Int) {
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(bottomEnd = 10.dp, bottomStart = 10.dp))
                 .background(
-                    itemcolor
+                    rowcolor
                 )
         ) {
             Icon(
@@ -154,7 +150,7 @@ fun FavuriteSample(clist: List<FavuriteListModel>?, i: Int) {
                     .clickable {
                         val clipboard =
                             context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                        val txtCopy = clist!!.get(i).poetry
+                        val txtCopy = clist.poetry
                         // clip data is initialized with the text variable declared above
                         val clipData = ClipData.newPlainText("text", txtCopy)
                         // Clipboard saves this clip object
@@ -182,14 +178,13 @@ fun FavuriteSample(clist: List<FavuriteListModel>?, i: Int) {
                             .getDao()
                             .delete(
                                 FavuriteListModel(
-                                    clist.get(i).uid,
-                                    clist.get(i).poetry,
+                                    clist.uid,
+                                    clist.poetry,
                                 )
                             )
                         Toast
                             .makeText(context, "Data deleted to Favurite", Toast.LENGTH_SHORT)
-                            .show()
-                    }
+                            .show() }
             )
             Icon(
                 imageVector = Icons.Filled.Share,
@@ -205,9 +200,9 @@ fun FavuriteSample(clist: List<FavuriteListModel>?, i: Int) {
                     .clickable {
                         val sendIntent = Intent()
                         sendIntent.setAction(Intent.ACTION_SEND)
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, "${clist!!.get(i).poetry}")
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, "${clist.poetry}")
                         sendIntent.setType("text/plain")
-                        context.startActivity(Intent.createChooser(sendIntent, ""))
+                       // context.startActivity(Intent.createChooser(sendIntent, ""))
                         context.startActivity(sendIntent)
                     }
             )
