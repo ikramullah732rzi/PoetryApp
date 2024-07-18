@@ -106,7 +106,7 @@ fun HomeScreen(
         mutableStateOf(false)
     }
     val contextt = LocalContext.current
-    val shareAppUrl = "https://play.google.com/store/apps/details?id=com.iinnovation.quizapp"
+    val shareAppUrl = "https://play.google.com/store/apps/details?id=com.iinnovation.hindishayari"
     val shareBody =
         "Enjoy beautiful poems, share your creations, and join a community of poetry lovers. Download $shareAppUrl now and start your poetic journey!"
 
@@ -139,7 +139,7 @@ fun HomeScreen(
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(200.dp)
+                                .height(250.dp)
                                 .background(itemcolor)
                                 .padding(horizontal = 16.dp),
                             contentAlignment = Alignment.Center
@@ -161,9 +161,8 @@ fun HomeScreen(
                                     }
                             )
                             Spacer(modifier = Modifier.height(30.dp))
-
-                            Text(text = "Hindi Shayari", color = Color.White,modifier = Modifier.align(Alignment.BottomCenter))
-                            Spacer(modifier = Modifier.height(30.dp))
+                            Text(text = "Hindi Shayari", color = Color.White,modifier = Modifier.padding(bottom = 20.dp).align(Alignment.BottomCenter))
+                           // Spacer(modifier = Modifier.height(30.dp))
                         }
 
                         listofDrawer.forEachIndexed { index, item ->

@@ -55,8 +55,23 @@ class MainActivity : ComponentActivity() {
 
         adsViewModel = ViewModelProvider(this)[AdsViewModel::class.java]
         MobileAds.initialize(this) {}
+        setContent {
+            val mutableMode = remember { mutableStateOf(mode) } // Initially empty
+            PoetryAppTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
 
-        // Check for internet connectivity before API call
+                    MainApp(
+                        this@MainActivity, mutableMode.value, adsViewModel
+                    ) // Pass fetched value
+                }
+
+
+            }
+        }
+       /* // Check for internet connectivity before API call
         if (isConnectedToNetwork()) {
             val retrofit = ClientApi.getApiClient().create(ApiEndpoints::class.java)
 
@@ -117,7 +132,7 @@ class MainActivity : ComponentActivity() {
 
                 }
             }
-        }
+        }*/
     }
 
     // Function to check internet connectivity (replace with your preferred method)
@@ -126,22 +141,6 @@ class MainActivity : ComponentActivity() {
             getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
         return activeNetwork != null && activeNetwork.isConnected
-    }
-
-
-    fun showExitConfirmationDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Exit Confirmation")
-        builder.setMessage("Are you sure you want to exit?")
-        builder.setPositiveButton("Yes") { dialog, which ->
-            finish() // Close the activity
-        }
-        builder.setNegativeButton("No") { dialog, which ->
-            dialog.dismiss() // Dismiss the dialog without exiting
-        }
-        builder.setCancelable(false) // Prevent dismissing by tapping outside the dialog
-        val dialog = builder.create()
-        dialog.show()
     }
 
 }
