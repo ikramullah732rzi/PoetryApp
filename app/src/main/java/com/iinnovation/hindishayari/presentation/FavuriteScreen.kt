@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -160,8 +161,8 @@ fun FavuriteSample(clist: FavuriteListModel) {
                     }
             )
             Icon(
-                imageVector = Icons.Default.Favorite,
-                contentDescription = "Favorite icon",
+                imageVector = Icons.Default.Remove,
+                contentDescription = "Remove icon",
                 tint = Color.White,
                 modifier = Modifier
                     .padding(top = 10.dp, bottom = 10.dp)
